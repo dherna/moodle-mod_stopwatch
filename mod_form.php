@@ -64,7 +64,7 @@ class mod_stopwatch_mod_form extends moodleform_mod {
         $mform->addHelpButton('name', 'stopwatchname', 'stopwatch');
 
         // Adding the standard "intro" and "introformat" fields.
-//        $this->add_intro_editor();
+	//        $this->add_intro_editor();
 	$this->standard_intro_elements();
         // Adding the rest of stopwatch settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
@@ -73,58 +73,15 @@ class mod_stopwatch_mod_form extends moodleform_mod {
         $mform->addElement('header', 'stopwatchfieldset', get_string('stopwatchfieldset', 'stopwatch'));
 		
         // actividad condicional 
-        // en el WHERE  tbl.userid = '4' AND tbl.courseid = '8'
-        
+
         $sql = "SELECT cm.id AS activityid, cm.course, cm.instance, cm.section, q.name AS activityname
-				FROM mdl_course_modules cm JOIN 
-     				mdl_modules m ON cm.module = m.id JOIN
-     				mdl_quiz q ON q.course = cm.course AND q.id = cm.instance
-				WHERE m.name = 'quiz' AND cm.course =".$COURSE->id;
+		FROM mdl_course_modules cm JOIN 
+     		mdl_modules m ON cm.module = m.id JOIN
+     		mdl_quiz q ON q.course = cm.course AND q.id = cm.instance
+		WHERE cm.course =".$COURSE->id;
 
-        
-        /*
-       $sql =  "SELECT IFNULL(tbl.instance, '-') instance, tbl.courseid, tbl.fullname, IFNULL(tbl.activityname, '-') activityname,  IFNULL(tbl.activityid, 0) activityid,
-    				IFNULL(tbl.module, '-') module
-    				FROM (
-    					SELECT  tbl1.courseid, tbl1.fullname, tbl2.instance,
-        				CASE tbl2.module WHEN 'quiz' THEN (SELECT `name` FROM mdl_quiz WHERE id = tbl2.instance AND course = tbl1.courseid)
-        				END activityname,
-	                            	CASE tbl2.module WHEN 'quiz' THEN (SELECT id FROM mdl_quiz WHERE id = tbl2.instance AND course = tbl1.courseid)
-        				END activityid,
-                            
-        				tbl2.module
-        
-    					FROM (
-					        SELECT u.id userid, CONCAT(u.firstname, ' ', u.lastname) `name`, c.id courseid, c.fullname
-					        FROM mdl_user u
-					        JOIN mdl_role_assignments ra ON u.id = ra.userid
-					        JOIN mdl_context co ON ra.contextid = co.id
-					        JOIN mdl_role r ON ra.roleid = r.id
-					        JOIN mdl_course c ON co.instanceid = c.id
-					        JOIN mdl_enrol e ON c.id = e.courseid
-					        WHERE r.archetype = 'student') tbl1
-						LEFT JOIN (
-							        SELECT cm.course, m.name module, cm.instance FROM mdl_course_modules cm
-							        JOIN mdl_modules m ON cm.module = m.id
-							        WHERE m.name = 'quiz' 
-							) tbl2
-							ON tbl1.courseid = tbl2.course) tbl ";
-
-					// if(!$cm) $sql .= " WHERE module = 'quiz' "; 
-					// else  	$sql .= " WHERE module = 'quiz' and tbl.courseid = ".$cm->course;
-					
-	 
-	$sql .= " WHERE module = 'quiz' and tbl.courseid = ".$cm->course;
-	$sql .= " GROUP BY tbl.courseid, tbl.instance ORDER BY tbl.fullname, tbl.activityname";
-*/
-          
 	$records = $DB->get_records_sql($sql);
         
-    //$mform->addElement('select', 'selectfield', 'Single select', array(0 => 'Item 1', 1 => 'Item 2', 3 => 'Item 3'));
-    //$mform->disabledIf('selectfield', 'disableelements', 'checked');
-    //$attributes=array('size'=>'20');
-    //$select->addOption( 'Seleccionar', '0', array( 'enabled' => 'enabled' ) );
-    //$select->addOption( '-', '', array( 'disabled' => 'disabled' ) );
 	$attributes='size="1"';
 	$options = array('0' => 'Seleccionar');
 	$select = $mform->addElement('select', 'swactivitytoid', get_string('stopwatchactivityid', 'stopwatch'),  $options, $attributes);

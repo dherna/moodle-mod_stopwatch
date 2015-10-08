@@ -75,64 +75,31 @@ $PAGE->set_heading(format_string($course->fullname));
 echo $OUTPUT->header();
 
 if (isset($_POST["submitbutton"]) && !empty($_POST["submitbutton"])) {
-	
-	
-	// https://inaki.dev.sallenet.info/sallenet2/mod/stopwatch/view.php?course=423&stopwatch=1&activityfromid=3667&activitytoid=3303&userid=2&starttime=1441968056175&endtime=1441968057882&cmid=3667&stopwatchid=1&submitbutton=Guardar+valores
+
 	$stopwatch->swactivityfromid = $cm->id;
-	//$stopwatch->swactivityfromid = $mform->getElement('stopwatch')->setSelected($options);
-	
-	
 	$stopwatch->swuserid = $USER->id;
 	$stopwatch->swtimestart = $_POST['starttime'];
 	$stopwatch->swtimefinish = $_POST['endtime'];
 	$stopwatch->timecreated = time();
 	$stopwatch->timemodified = time();
-		
 	$stopwatch->id = $DB->insert_record('stopwatch', $stopwatch);
 	stopwatch_grade_item_update($stopwatch);
 	
 	if (!$PAGE->user_is_editing()) { // si no se está en modo edición del Curso
-		
 		echo $OUTPUT->heading("El tiempo de lectura ha sido guardado y pasamos a la prueba");
-		
 		$url = $CFG->httpswwwroot . "/mod/quiz/view.php?id=".$stopwatch->swactivitytoid;
 		echo $OUTPUT->heading('<div class="continuebutton">(<a href="'.$url.'">Continuar</a>)</div>');
-		
-		// https://inaki.dev.sallenet.info/sallenet2/course/mod.php?sesskey=lRMQ5xHtDy&sr=0&update=12443
-		
-		/*$url = $CFG->httpswwwroot . "/mod/quiz/view.php?id=11665";
-		$msg = "El tiempo de lectura ha sido guardado y pasamos a la prueba...";
-		$time = 10; // integer in seconds
-		try { redirect($url, $msg, $time);
-		
-		} catch (Exception $e) {
-			
-		}
-		*/
-		/*
-		 * You should really redirect before you start page output
-
-    		line 758 of /lib/outputrenderers.php: call to debugging()
-    		line 2591 of /lib/weblib.php: call to core_renderer->redirect_message()
-    		line 103 of /mod/stopwatch/view.php: call to redirect()
-    		
-    		Error output, so disabling automatic redirect.
-    		/lib/weblib.php $debugdisableredirect = false; 
-		 */
 	}
 	else echo $OUTPUT->heading("Pasamos a la prueba de lectura eficaz si no se está en modo edición del curso! Por favor desactiva el modo edición");
-	
-	
 	
 }
 else {
 
-		if ($stopwatch->intro) {
-			// añadir más intro $stopwatch->intro.='';
-			echo $OUTPUT->box(format_module_intro('stopwatch', $stopwatch, $cm->id), 'generalbox mod_introbox', 'stopwatchintro');
-		}
+	if ($stopwatch->intro) {
+		echo $OUTPUT->box(format_module_intro('stopwatch', $stopwatch, $cm->id), 'generalbox mod_introbox', 'stopwatchintro');
+	}
 	
-		echo $OUTPUT->heading('
+	echo $OUTPUT->heading('
 	    <script>
 	    var timein=0;
 	    var timeout=0; // tiempo en segundos
@@ -155,9 +122,9 @@ else {
 	            cronometer();
 	        }
 		else{
-	  	   		// obtener time final
+	   		// obtener time final
 	           	endtime= new Date().getTime();
-				document.getElementById("swtimefinish").value = endtime;
+			document.getElementById("swtimefinish").value = endtime;
 	
 		    	//alert(starttime+" "+endtime+" "+timein+" = "+timeout+" segundos");
 	 
@@ -170,8 +137,8 @@ else {
 	            localStorage.removeItem("timein");
 	            timeout=0;
 			
-			 	document.getElementById("enviar").innerHTML = "<input name=\"submitbutton\" value=\"Pasar a la prueba\" id=\"id_submitbutton\" type=\"submit\">";
-	  		    document.getElementById("boton").disabled = true; 
+	   	    document.getElementById("enviar").innerHTML = "<input name=\"submitbutton\" value=\"Pasar a la prueba\" id=\"id_submitbutton\" type=\"submit\">";
+		    document.getElementById("boton").disabled = true; 
 	        }
 	    }
 	 
